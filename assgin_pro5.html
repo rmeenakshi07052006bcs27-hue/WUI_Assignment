@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Portfolio | Web Developer</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      scroll-behavior: smooth;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(90deg, #0d6efd, #3a7bd5);
+      color: #fff;
+      padding: 2rem 0;
+      text-align: center;
+      position: relative;
+    }
+
+    header h1 {
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    }
+
+    #clock {
+      font-size: 1rem;
+      position: absolute;
+      top: 10px;
+      right: 15px;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    #about {
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    #projects .card {
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    #projects .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    footer {
+      background-color: #0d6efd;
+      color: #fff;
+      text-align: center;
+      padding: 1rem 0;
+      margin-top: 2rem;
+    }
+
+    .navbar {
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    /* Contact form */
+    #contact form {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .greeting {
+      font-weight: 500;
+      font-size: 1.2rem;
+      color: #ffc107;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      header h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+    <div class="container">
+      <a class="navbar-brand text-primary fw-bold" href="#">MyPortfolio</a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div id="navMenu" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a href="#about" class="nav-link">About Me</a></li>
+          <li class="nav-item"><a href="#projects" class="nav-link">Projects</a></li>
+          <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header>
+    <h1 id="greeting">Welcome!</h1>
+    <p>I'm a passionate Web Developer creating modern, responsive designs.</p>
+    <div id="clock"></div>
+  </header>
+
+  <!-- ABOUT SECTION -->
+  <section id="about" class="container">
+    <h2 class="text-center mb-4">About Me</h2>
+    <article>
+      <p>
+        Hello! I'm <strong>Alex Carter</strong>, a full-stack web developer specializing in 
+        front-end technologies like HTML5, CSS3, JavaScript, and frameworks like React and Bootstrap.
+      </p>
+      <p>
+        I love building clean, user-friendly, and responsive web applications that bring ideas to life.
+        With a keen eye for detail and performance, I enjoy turning complex problems into elegant solutions.
+      </p>
+    </article>
+  </section>
+
+  <!-- PROJECTS SECTION -->
+  <section id="projects" class="container">
+    <h2 class="text-center mb-5">Projects</h2>
+    <div class="row g-4" id="projectCards">
+      <!-- Projects dynamically loaded by jQuery -->
+    </div>
+  </section>
+
+  <!-- CONTACT SECTION -->
+  <section id="contact" class="container">
+    <h2 class="text-center mb-4">Contact Me</h2>
+    <form id="contactForm">
+      <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input type="text" id="name" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" id="email" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Message</label>
+        <textarea id="message" class="form-control" rows="4" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Send Message</button>
+    </form>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2025 Alex Carter | Web Developer Portfolio</p>
+  </footer>
+
+  <!-- PROJECT DETAILS MODAL -->
+  <div class="modal fade" id="projectModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-3">
+        <div class="modal-header">
+          <h5 id="projectTitle" class="modal-title"></h5>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <img id="projectImage" class="img-fluid rounded mb-3" alt="">
+          <p id="projectDescription"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT SECTION -->
+  <script>
+    // ========== 1. JavaScript: Live Clock and Dynamic Greeting ==========
+    function updateClock() {
+      const now = new Date();
+      document.getElementById("clock").textContent = now.toLocaleTimeString();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Dynamic greeting based on time
+    const hours = new Date().getHours();
+    let greeting = "Welcome!";
+    if (hours < 12) greeting = "Good Morning 🌞";
+    else if (hours < 18) greeting = "Good Afternoon ☀️";
+    else greeting = "Good Evening 🌙";
+    document.getElementById("greeting").textContent = greeting;
+
+    // ========== 2. jQuery: Smooth Scroll and Dynamic Projects ==========
+    $(document).ready(function() {
+      // Smooth scroll
+      $("a.nav-link").on("click", function(e) {
+        if (this.hash !== "") {
+          e.preventDefault();
+          const target = this.hash;
+          $("html, body").animate({ scrollTop: $(target).offset().top - 60 }, 800);
+        }
+      });
+
+      // Dynamically load projects
+      const projects = [
+        {
+          title: "Portfolio Website",
+          img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800",
+          desc: "A responsive personal portfolio website built with HTML, CSS, and Bootstrap."
+        },
+        {
+          title: "E-Commerce Store",
+          img: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800",
+          desc: "A dynamic online shopping app with cart and payment integration."
+        },
+        {
+          title: "Task Management App",
+          img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800",
+          desc: "A JavaScript-based task tracker with local storage and filters."
+        }
+      ];
+
+      projects.forEach((proj, i) => {
+        $("#projectCards").append(`
+          <div class="col-md-4">
+            <div class="card">
+              <img src="${proj.img}" class="card-img-top" alt="${proj.title}">
+              <div class="card-body">
+                <h5 class="card-title">${proj.title}</h5>
+                <button class="btn btn-outline-primary btn-sm view-btn" data-index="${i}" data-bs-toggle="modal" data-bs-target="#projectModal">View Details</button>
+              </div>
+            </div>
+          </div>
+        `);
+      });
+
+      // Show modal details dynamically
+      $(document).on("click", ".view-btn", function() {
+        const i = $(this).data("index");
+        $("#projectTitle").text(projects[i].title);
+        $("#projectImage").attr("src", projects[i].img);
+        $("#projectDescription").text(projects[i].desc);
+      });
+
+      // Contact form handling
+      $("#contactForm").on("submit", function(e) {
+        e.preventDefault();
+        alert("Thank you for contacting me! I’ll get back to you soon.");
+        $(this)[0].reset();
+      });
+    });
+  </script>
+</body>
+</html>

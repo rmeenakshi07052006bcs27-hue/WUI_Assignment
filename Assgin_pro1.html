@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Employee Performance Dashboard</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Optional: Google font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #f5f7fb;
+      --card-bg: #ffffff;
+      --text: #212529;
+      --muted: #6c757d;
+      --accent: #0d6efd;
+      --card-radius: 12px;
+      --shadow: 0 6px 18px rgba(18,38,63,0.08);
+    }
+    [data-theme="dark"] {
+      --bg: #0b1020;
+      --card-bg: #0f1724;
+      --text: #e6eef8;
+      --muted: #9aa6b2;
+      --accent: #66a1ff;
+      --shadow: none;
+    }
+
+    html,body{
+      height:100%;
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--bg);
+      color: var(--text);
+      margin:0;
+    }
+
+    header.site-header{
+      background: linear-gradient(90deg, rgba(13,110,253,0.08), transparent);
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+    .brand { font-weight:700; letter-spacing:0.2px; }
+
+    /* Card styling */
+    .kpi-card, .employee-card {
+      background: var(--card-bg);
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0,0,0,0.04);
+      padding: 1rem;
+    }
+
+    /* Sidebar filter */
+    aside.filters {
+      position: sticky;
+      top: 1rem;
+    }
+
+    /* Small tweaks for progress bars to be slightly taller */
+    .progress { height: 12px; border-radius: 8px; }
+
+    /* Responsive: stack columns on small screens and enlarge tap targets */
+    @media (max-width: 767.98px) {
+      .kpi-card { text-align:center; }
+      .controls .btn { width:100%; margin-bottom:.5rem; }
+      nav .nav-link { padding-left:.25rem; padding-right:.25rem; }
+    }
+
+    /* Larger screens — more padding and multi-column KPI layout */
+    @media (min-width: 992px) {
+      .kpi-card { padding:1.25rem; }
+    }
+
+    /* subtle helper classes */
+    .muted { color: var(--muted); }
+    .pointer { cursor:pointer; }
+  </style>
+</head>
+<body data-theme="light">
+
+  <header class="site-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center gap-3">
+      <div class="brand fs-5">Acme Corp · Performance Dashboard</div>
+      <small class="muted">Quarterly overview</small>
+    </div>
+
+    <div class="d-flex align-items-center gap-2 controls">
+      <div class="me-2">
+        <input id="searchInput" class="form-control form-control-sm" placeholder="Search employee..." style="min-width:200px">
+      </div>
+
+      <div class="me-2">
+        <select id="deptFilter" class="form-select form-select-sm">
+          <option value="">All Departments</option>
+          <option>Engineering</option>
+          <option>Sales</option>
+          <option>Design</option>
+          <option>HR</option>
+        </select>
+      </div>
+
+      <button id="themeToggle" class="btn btn-outline-secondary btn-sm" title="Toggle theme">Dark</button>
+    </div>
+  </header>
+
+  <main class="container-fluid py-4">
+    <div class="row g-4">
+      <!-- Left: main content -->
+      <div class="col-12 col-xl-9">
+        <!-- KPI row -->
+        <div class="row g-3 mb-3">
+          <div class="col-6 col-md-3">
+            <div class="kpi-card">
+              <div class="muted small">Avg. Productivity</div>
+              <div class="d-flex align-items-center justify-content-between">
+                <h4 class="mb-0">78%</h4>
+                <div class="muted small">vs 72% last qtr</div>
+              </div>
+              <div class="progress mt-2" role="progressbar" aria-label="Avg productivity">
+                <div class="progress-bar" style="width:78%" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-3">
+            <div class="kpi-card">
+              <div class="muted small">On-time Delivery</div>
+              <h4 class="mb-0">91%</h4>
+              <div class="progress mt-2"><div class="progress-bar bg-success" style="width:91%"></div></div>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-3">
+            <div class="kpi-card">
+              <div class="muted small">Customer Satisfaction</div>
+              <h4 class="mb-0">4.3 / 5</h4>
+              <div class="progress mt-2"><div class="progress-bar bg-info" style="width:86%"></div></div>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-3">
+            <div class="kpi-card">
+              <div class="muted small">Open Issues</div>
+              <h4 class="mb-0">12</h4>
+              <div class="muted small">(down 4)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Employee cards grid (data-driven) -->
+        <section id="employeesGrid" class="row g-3">
+          <!-- employee-card templates will be inserted here by JS -->
+        </section>
+      </div>
+
+      <!-- Right: filters / legend -->
+      <aside class="col-12 col-xl-3">
+        <div class="filters kpi-card mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <strong>Filters</strong>
+            <a id="toggleFilters" class="muted pointer small">Collapse</a>
+          </div>
+
+          <div id="filtersBody">
+            <div class="mb-2">
+              <label class="form-label small mb-1">Department</label>
+              <select id="deptFilterAside" class="form-select form-select-sm">
+                <option value="">Any</option><option>Engineering</option><option>Sales</option><option>Design</option><option>HR</option>
+              </select>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label small mb-1">Min Performance (%)</label>
+              <input id="minPerf" type="range" min="0" max="100" value="0" class="form-range">
+              <div class="d-flex justify-content-between small muted">
+                <span>0%</span><span id="minPerfVal">0%</span>
+              </div>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label small mb-1">Sort by</label>
+              <select id="sortBy" class="form-select form-select-sm">
+                <option value="name">Name (A–Z)</option>
+                <option value="performance">Performance (high→low)</option>
+                <option value="department">Department</option>
+              </select>
+            </div>
+
+            <div class="mt-3 d-grid">
+              <button id="applyFilters" class="btn btn-primary btn-sm">Apply</button>
+              <button id="resetFilters" class="btn btn-outline-secondary btn-sm mt-1">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <strong>Legend</strong>
+          <p class="small muted mb-0">Progress bars show recent performance vs. targets. Click an employee card to expand details.</p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="text-center py-3 muted small">
+    &copy; 2025 Acme Corp · Internal Dashboard
+  </footer>
+
+  <!-- jQuery + Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+  // ----- SAMPLE DATA (in a real app this comes from an API) -----
+  const employees = [
+    { id:1, name:"Asha Kumar", dept:"Engineering", performance:88, tasksCompleted:42, issues:1, notes:"Mentor for interns" },
+    { id:2, name:"Rahul Singh", dept:"Sales", performance:95, tasksCompleted:50, issues:0, notes:"Top seller Q3" },
+    { id:3, name:"Priya Nair", dept:"Design", performance:76, tasksCompleted:30, issues:3, notes:"Improving UI toolkit" },
+    { id:4, name:"Vikram Patel", dept:"Engineering", performance:69, tasksCompleted:25, issues:6, notes:"Needs support on deadlines" },
+    { id:5, name:"Sneha Rao", dept:"HR", performance:82, tasksCompleted:20, issues:0, notes:"Great onboarding feedback" },
+  ];
+
+  // ----- RENDER EMPLOYEE CARDS -----
+  function renderEmployees(list) {
+    const container = document.getElementById('employeesGrid');
+    container.innerHTML = '';
+    if (!list.length) {
+      container.innerHTML = '<div class="col-12"><div class="kpi-card text-center muted">No employees match filters</div></div>';
+      return;
+    }
+    list.forEach(emp => {
+      const col = document.createElement('div');
+      col.className = 'col-12 col-md-6 col-lg-4';
+      col.innerHTML = `
+        <div class="employee-card pointer" data-id="${emp.id}">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <strong>${emp.name}</strong>
+              <div class="muted small">${emp.dept}</div>
+            </div>
+            <div class="text-end">
+              <div class="h4 mb-0">${emp.performance}%</div>
+              <div class="muted small">Performance</div>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <div class="progress" aria-hidden="true"><div class="progress-bar" style="width:${emp.performance}%"></div></div>
+          </div>
+
+          <div class="employee-details mt-3" style="display:none;">
+            <hr>
+            <div class="small muted">Tasks Completed: <strong>${emp.tasksCompleted}</strong></div>
+            <div class="small muted">Open Issues: <strong>${emp.issues}</strong></div>
+            <div class="small muted mt-1">Notes: <em>${emp.notes}</em></div>
+            <div class="mt-2 d-flex gap-2">
+              <button class="btn btn-sm btn-outline-primary view-more">View Profile</button>
+              <button class="btn btn-sm btn-outline-secondary">Send Message</button>
+            </div>
+          </div>
+        </div>
+      `;
+      container.appendChild(col);
+    });
+  }
+
+  // ----- THEME SWITCH (Vanilla JS + localStorage) -----
+  const themeToggleBtn = document.getElementById('themeToggle');
+  function applyTheme(theme) {
+    document.body.setAttribute('data-theme', theme);
+    themeToggleBtn.textContent = theme === 'dark' ? 'Light' : 'Dark';
+    // persist
+    try { localStorage.setItem('dashboardTheme', theme); } catch(e){}
+  }
+  // init from storage
+  (function initTheme(){
+    const saved = (localStorage.getItem('dashboardTheme') || 'light');
+    applyTheme(saved);
+  })();
+
+  themeToggleBtn.addEventListener('click', () => {
+    const current = document.body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+
+  // ----- FILTERS + SEARCH + SORT -----
+  function applyFiltersAndRender() {
+    const search = document.getElementById('searchInput').value.trim().toLowerCase();
+    const dept = document.getElementById('deptFilterAside').value || document.getElementById('deptFilter').value || '';
+    const minPerf = parseInt(document.getElementById('minPerf').value || 0,10);
+    const sortBy = document.getElementById('sortBy').value;
+
+    let filtered = employees.filter(e => {
+      const matchesName = e.name.toLowerCase().includes(search);
+      const matchesDept = !dept || e.dept === dept;
+      const matchesPerf = e.performance >= minPerf;
+      return matchesName && matchesDept && matchesPerf;
+    });
+
+    // sorting
+    if (sortBy === 'performance') filtered.sort((a,b) => b.performance - a.performance);
+    else if (sortBy === 'department') filtered.sort((a,b) => a.dept.localeCompare(b.dept));
+    else filtered.sort((a,b) => a.name.localeCompare(b.name));
+
+    renderEmployees(filtered);
+  }
+
+  // Wire up controls
+  document.getElementById('applyFilters').addEventListener('click', applyFiltersAndRender);
+  document.getElementById('resetFilters').addEventListener('click', () => {
+    document.getElementById('deptFilterAside').value = '';
+    document.getElementById('deptFilter').value = '';
+    document.getElementById('minPerf').value = 0;
+    document.getElementById('minPerfVal').textContent = '0%';
+    document.getElementById('sortBy').value = 'name';
+    document.getElementById('searchInput').value = '';
+    applyFiltersAndRender();
+  });
+
+  // live search + dept select (header) triggers
+  document.getElementById('searchInput').addEventListener('input', debounce(applyFiltersAndRender, 200));
+  document.getElementById('deptFilter').addEventListener('change', applyFiltersAndRender);
+  document.getElementById('deptFilterAside').addEventListener('change', () => {
+    // keep header filter in sync
+    document.getElementById('deptFilter').value = document.getElementById('deptFilterAside').value;
+    applyFiltersAndRender();
+  });
+
+  // slider display
+  document.getElementById('minPerf').addEventListener('input', e => {
+    document.getElementById('minPerfVal').textContent = e.target.value + '%';
+  });
+
+  // ----- jQuery: expand/collapse employee details with animation -----
+  // Use event delegation because cards are re-rendered
+  $(document).on('click', '.employee-card', function(e){
+    // If click on interactive buttons inside card, don't toggle
+    if ( $(e.target).closest('button').length ) return;
+    const $details = $(this).find('.employee-details');
+    $details.slideToggle(200);
+    $(this).toggleClass('expanded');
+  });
+
+  // Toggle filters panel
+  $('#toggleFilters').on('click', function(){
+    $('#filtersBody').slideToggle(180);
+    $(this).text(function(i,txt){ return txt.trim() === 'Collapse' ? 'Expand' : 'Collapse'; });
+  });
+
+  // ----- utility: debounce -----
+  function debounce(fn, wait){
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn.apply(this, args), wait);
+    };
+  }
+
+  // initial render
+  renderEmployees(employees);
+  </script>
+</body>
+</html>

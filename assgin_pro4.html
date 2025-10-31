@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>E-Learning Portal</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #0d6efd;
+      --light-bg: #f8f9fa;
+    }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: var(--light-bg);
+      color: #212529;
+    }
+
+    /* Navbar */
+    header nav {
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(90deg, #0d6efd, #5aa9fa);
+      color: #fff;
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    /* Course Cards */
+    .course-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .course-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .course-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .course-card .card-body {
+      padding: 1rem;
+    }
+
+    /* Login Modal */
+    .modal-content {
+      border-radius: 12px;
+    }
+
+    .error-text {
+      color: red;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    /* Footer */
+    footer {
+      background: #0d6efd;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 2rem 1rem;
+      }
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+      <div class="container">
+        <a class="navbar-brand fw-bold text-primary" href="#">E-Learn</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Courses</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Web Development</a></li>
+                <li><a class="dropdown-item" href="#">Data Science</a></li>
+                <li><a class="dropdown-item" href="#">AI & ML</a></li>
+              </ul>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+            <li class="nav-item">
+              <button class="btn btn-primary btn-sm ms-lg-3" data-bs-toggle="modal" data-bs-target="#loginModal">
+                Login
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <h1 class="fw-bold">Learn Anytime, Anywhere</h1>
+      <p class="lead">Upgrade your skills with expert-led online courses.</p>
+      <button class="btn btn-light mt-3">Explore Courses</button>
+    </div>
+  </section>
+
+  <!-- FEATURED COURSES -->
+  <section class="container my-5">
+    <h3 class="text-center mb-4">Featured Courses</h3>
+
+    <!-- Course slider (animated with jQuery) -->
+    <div id="courseSlider" class="d-flex flex-nowrap overflow-hidden gap-3">
+      <article class="course-card col-md-4 flex-shrink-0">
+        <img src="https://images.unsplash.com/photo-1556761175-129418cb2dfe?q=80&w=1000" alt="Web Development">
+        <div class="card-body">
+          <h5>Web Development</h5>
+          <p>Learn HTML, CSS, JS, and modern frameworks.</p>
+          <button class="btn btn-outline-primary btn-sm">Enroll Now</button>
+        </div>
+      </article>
+
+      <article class="course-card col-md-4 flex-shrink-0">
+        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1000" alt="Data Science">
+        <div class="card-body">
+          <h5>Data Science</h5>
+          <p>Master Python, data visualization, and ML basics.</p>
+          <button class="btn btn-outline-primary btn-sm">Enroll Now</button>
+        </div>
+      </article>
+
+      <article class="course-card col-md-4 flex-shrink-0">
+        <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1000" alt="AI & ML">
+        <div class="card-body">
+          <h5>AI & Machine Learning</h5>
+          <p>Dive into neural networks and deep learning.</p>
+          <button class="btn btn-outline-primary btn-sm">Enroll Now</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- LOGIN MODAL -->
+  <div class="modal fade" id="loginModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-3">
+        <div class="modal-header">
+          <h5 class="modal-title">User Login</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="loginForm">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
+              <div class="error-text" id="emailError">Please enter a valid email.</div>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" placeholder="********" required>
+              <div class="error-text" id="passError">Password must be at least 6 characters.</div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="mb-0">© 2025 E-Learn Portal | Learn. Grow. Succeed.</p>
+  </footer>
+
+  <script>
+    // ========== JavaScript Login Validation ==========
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      let valid = true;
+
+      // Reset error messages
+      $("#emailError, #passError").hide();
+
+      // Email validation
+      if (!email.includes("@") || !email.includes(".")) {
+        $("#emailError").fadeIn();
+        valid = false;
+      }
+
+      // Password validation
+      if (password.length < 6) {
+        $("#passError").fadeIn();
+        valid = false;
+      }
+
+      if (valid) {
+        alert("Login successful (demo only)");
+        $("#loginModal").modal("hide");
+        $("#loginForm")[0].reset();
+      }
+    });
+
+    // ========== jQuery Animation for Featured Courses ==========
+    $(document).ready(function () {
+      function slideCourses() {
+        $("#courseSlider article:first")
+          .slideUp(400, function () {
+            $(this)
+              .appendTo("#courseSlider")
+              .show();
+          });
+      }
+      setInterval(slideCourses, 3000); // every 3 seconds
+    });
+  </script>
+</body>
+</html>
